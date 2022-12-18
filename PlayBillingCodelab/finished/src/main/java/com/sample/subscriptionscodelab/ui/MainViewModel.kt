@@ -246,6 +246,12 @@ class MainViewModel(application: Application) :
         activity: Activity,
         tag: String
     ) {
+        Log.d(
+            TAG,
+            "subscriptionOfferDetails = [" +
+                    productDetails.subscriptionOfferDetails?.joinToString { it.debugString() } +
+                    "]"
+        )
         val offers =
             productDetails.subscriptionOfferDetails?.let {
                 retrieveEligibleOffers(
@@ -303,6 +309,32 @@ class MainViewModel(application: Application) :
             /// implement a logic to find which one to use.
             Log.d(TAG, "User has more than 1 current purchase.")
         }
+    }
+
+    private fun ProductDetails.SubscriptionOfferDetails.debugString(): String = buildString {
+        append("{")
+        append("basePlanId=$basePlanId")
+        append(", offerId=$offerId")
+        append(", offerTags=$offerTags")
+        append(", offerToken=$offerToken")
+        append(", pricingPhases=${pricingPhases.debugString()}")
+        append("}")
+    }
+
+    private fun ProductDetails.PricingPhases.debugString(): String = buildString {
+        append("[")
+        append(pricingPhaseList.joinToString { it.debugString() })
+        append("]")
+    }
+
+    private fun ProductDetails.PricingPhase.debugString(): String = buildString {
+        append("{")
+        append("formattedPrice = $formattedPrice")
+        append(", priceCurrencyCode = $priceCurrencyCode")
+        append(", billingPeriod = $billingPeriod")
+        append(", billingCycleCount = $billingCycleCount")
+        append(", recurrenceMode = $recurrenceMode")
+        append("}")
     }
 
     // When an activity is destroyed the viewModel's onCleared is called, so we terminate the
